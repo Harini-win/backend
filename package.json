@@ -1,0 +1,11 @@
+{
+  "name": "flavourrthym",
+  "version": "1.0.0",
+  "description": "A frontend-only food recipe website with Clerk authentication",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

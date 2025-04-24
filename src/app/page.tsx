@@ -4,16 +4,12 @@ import { FoodEmoji } from '@/components/FoodEmoji';
 import Recipe from '@/components/Recipe';
 import Search from '@/components/Search';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { SignIn, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Home() {
-  useEffect(() => {
-    // Initialize Clerk if needed
-    const script = document.createElement('script');
-    script.src = "https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js";
-    document.body.appendChild(script);
-  }, []);
+  const [showRecipe, setShowRecipe] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   return (
     <main className="w-full min-h-screen max-w-[1920px] mx-auto relative">
@@ -34,19 +30,94 @@ export default function Home() {
         </SignedIn>
       </div>
 
-      {/* Recipe and Search Components */}
-      <div className="pt-32 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-2xl font-bold mb-4 text-white">Recipe of the Day</h2>
+      {/* Clickable Areas */}
+      <div className="absolute inset-0">
+        {/* Recipe Card Link */}
+        <div 
+          onClick={() => setShowRecipe(true)}
+          className="absolute cursor-pointer hover:opacity-80 transition-opacity border-2 border-transparent hover:border-white"
+          style={{
+            bottom: '15%',
+            left: 'calc(50% - 280px)',
+            width: '250px',
+            height: '300px',
+          }}
+          aria-label="Recipe of the day"
+        />
+
+        {/* Joke Card Link */}
+        <Link 
+          href="/joke" 
+          className="absolute cursor-pointer hover:opacity-80 transition-opacity border-2 border-transparent hover:border-white"
+          style={{
+            bottom: '15%',
+            left: 'calc(50% + 30px)',
+            width: '250px',
+            height: '300px',
+          }}
+          aria-label="Joke of the day"
+        />
+
+        {/* Search Button */}
+        <div 
+          onClick={() => setShowSearch(true)}
+          className="absolute cursor-pointer hover:opacity-80 transition-opacity"
+          style={{
+            top: '3px',
+            left: '10px',
+            width: '40px',
+            height: '35px',
+          }}
+          aria-label="Search recipes"
+        />
+
+        {/* Navigation Links */}
+        <Link 
+          href="/favorites" 
+          className="absolute cursor-pointer"
+          style={{
+            top: '3px',
+            right: '60px',
+            width: '40px',
+            height: '35px',
+          }}
+        />
+      </div>
+
+      {/* Recipe Modal */}
+      {showRecipe && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="relative w-full max-w-4xl">
+            <button 
+              onClick={() => setShowRecipe(false)}
+              className="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors z-10"
+            >
+              ✕
+            </button>
             <Recipe />
           </div>
-          <div>
-            <h2 className="text-2xl font-bold mb-4 text-white">Search Recipes</h2>
-            <Search />
+        </div>
+      )}
+
+      {/* Search Modal */}
+      {showSearch && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="relative w-full max-w-7xl">
+            <button 
+              onClick={() => setShowSearch(false)}
+              className="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors z-10"
+            >
+              ✕
+            </button>
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-3xl font-bold text-center mb-6">Search Recipes</h2>
+                <Search />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <FoodEmoji />
     </main>

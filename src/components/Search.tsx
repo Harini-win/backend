@@ -45,7 +45,7 @@ export default function Search() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="w-full">
       <div className="mb-8 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <input
@@ -53,7 +53,9 @@ export default function Search() {
             placeholder="Enter ingredients..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && searchRecipes()}
             className="p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300"
+            autoFocus
           />
           
           <select
@@ -106,7 +108,16 @@ export default function Search() {
       </div>
 
       {loading && (
-        <div className="text-center py-8">Loading recipes...</div>
+        <div className="text-center py-8">
+          <div className="animate-pulse">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-gray-200 rounded-xl h-64"></div>
+              ))}
+            </div>
+          </div>
+          <p className="mt-4 text-gray-600">Searching for delicious recipes...</p>
+        </div>
       )}
 
       {error && (
@@ -156,6 +167,12 @@ export default function Search() {
           </div>
         ))}
       </div>
+
+      {recipes.length === 0 && !loading && !error && (
+        <div className="text-center py-8 text-gray-500">
+          Enter ingredients or select filters to search for recipes
+        </div>
+      )}
     </div>
   );
 } 

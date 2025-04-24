@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 interface Recipe {
   id: number;
@@ -126,8 +127,9 @@ export default function Search() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {recipes.map((recipe) => (
-          <div 
+          <Link 
             key={recipe.id} 
+            href={`/recipe/${recipe.id}`}
             className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <div className="relative">
@@ -157,14 +159,8 @@ export default function Search() {
                   </span>
                 )}
               </div>
-              <a
-                href={`/recipe/${recipe.id}`}
-                className="block text-center py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 hover:shadow-md"
-              >
-                View Recipe
-              </a>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

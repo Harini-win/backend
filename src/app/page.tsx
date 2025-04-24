@@ -22,14 +22,61 @@ export default function Home() {
         </h1>
       </div>
 
-      {/* Authentication */}
-      <div className="absolute top-4 right-4 z-30">
-        <SignedOut>
-          <SignIn />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+      {/* Top Navigation Bar */}
+      <div className="absolute top-0 left-0 right-0 z-30 bg-black/20 backdrop-blur-sm px-4 py-3 flex justify-between items-center">
+        {/* Search Button */}
+        <button
+          onClick={() => setShowSearch(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-300 border border-white/30"
+        >
+          <svg 
+            className="w-5 h-5" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+            />
+          </svg>
+          <span>Search Recipes</span>
+        </button>
+
+        {/* Right Side Buttons */}
+        <div className="flex items-center gap-4">
+          <SignedIn>
+            <button
+              onClick={() => setShowFavorites(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all duration-300 border border-white/30"
+            >
+              <svg 
+                className="w-5 h-5" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                />
+              </svg>
+              <span>Favorites</span>
+            </button>
+          </SignedIn>
+          <div className="bg-white/10 p-1 rounded-full">
+            <SignedOut>
+              <SignIn />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
+        </div>
       </div>
 
       {/* Clickable Areas */}
@@ -59,62 +106,6 @@ export default function Home() {
           }}
           aria-label="Joke of the day"
         />
-
-        {/* Search Button */}
-        <div 
-          onClick={() => setShowSearch(true)}
-          className="absolute cursor-pointer hover:opacity-80 transition-opacity"
-          style={{
-            top: '3px',
-            left: '10px',
-            width: '40px',
-            height: '35px',
-          }}
-          aria-label="Search recipes"
-        >
-          <svg 
-            className="w-6 h-6 text-white" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
-            />
-          </svg>
-        </div>
-
-        {/* Favorites Button */}
-        <SignedIn>
-          <div 
-            onClick={() => setShowFavorites(true)}
-            className="absolute cursor-pointer hover:opacity-80 transition-opacity"
-            style={{
-              top: '3px',
-              right: '60px',
-              width: '40px',
-              height: '35px',
-            }}
-            aria-label="View favorites"
-          >
-            <svg 
-              className="w-6 h-6 text-white" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-              />
-            </svg>
-          </div>
-        </SignedIn>
       </div>
 
       {/* Recipe Modal */}

@@ -99,13 +99,30 @@ export default function JokePage() {
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <h1 className="text-3xl font-bold text-center mb-8">Joke of the Day</h1>
           
-          {/* Add your joke content here */}
-          <div className="text-center text-xl">
-            Why don't eggs tell jokes?
-            <p className="mt-4 text-orange-500 font-semibold">
-              They'd crack up! 🥚
-            </p>
-          </div>
+          {loading ? (
+            <div className="text-center">
+              <div className="animate-pulse">
+                <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
+                <div className="h-8 bg-gray-200 rounded w-1/2 mx-auto"></div>
+              </div>
+              <p className="mt-4 text-gray-600">Loading today's joke...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center text-red-500">
+              <p>{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-4 px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
+              >
+                Try Again
+              </button>
+            </div>
+          ) : (
+            <div className="text-center">
+              <p className="text-xl mb-4">{joke}</p>
+              <p className="text-sm text-gray-500">{nextUpdate}</p>
+            </div>
+          )}
         </div>
       </div>
       <FoodEmoji />

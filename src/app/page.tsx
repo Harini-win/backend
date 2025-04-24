@@ -94,7 +94,7 @@ export default function Home() {
             >
               ✕
             </button>
-            <Recipe />
+            <Recipe onClose={() => setShowRecipe(false)} />
           </div>
         </div>
       )}

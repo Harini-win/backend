@@ -15,7 +15,11 @@ interface Recipe {
   analyzedInstructions: any[];
 }
 
-export default function Recipe() {
+interface RecipeProps {
+  onClose: () => void;
+}
+
+export default function Recipe({ onClose }: RecipeProps) {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -49,6 +53,20 @@ export default function Recipe() {
     return (
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
         <div className="p-8">
+          <button
+            onClick={onClose}
+            className="mb-6 px-6 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 group"
+          >
+            <svg 
+              className="w-5 h-5 transform transition-transform group-hover:-translate-x-1" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back
+          </button>
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
             <div className="h-64 bg-gray-200 rounded mb-4"></div>
@@ -64,6 +82,20 @@ export default function Recipe() {
     return (
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
         <div className="p-8 text-center">
+          <button
+            onClick={onClose}
+            className="mb-6 px-6 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 group"
+          >
+            <svg 
+              className="w-5 h-5 transform transition-transform group-hover:-translate-x-1" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back
+          </button>
           <p className="text-red-500 mb-4">{error}</p>
           <button
             onClick={fetchRecipe}
@@ -81,6 +113,21 @@ export default function Recipe() {
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       <div className="p-6">
+        <button
+          onClick={onClose}
+          className="mb-6 px-6 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 group"
+        >
+          <svg 
+            className="w-5 h-5 transform transition-transform group-hover:-translate-x-1" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+
         <h2 className="text-3xl font-bold text-center mb-6">{recipe.title}</h2>
         
         <div className="mb-8">

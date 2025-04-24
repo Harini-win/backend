@@ -1,9 +1,12 @@
 'use client';
 
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FoodEmoji } from '@/components/FoodEmoji';
 
 export default function JokePage() {
+  const router = useRouter();
   const [joke, setJoke] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -75,34 +78,37 @@ export default function JokePage() {
   }, []);
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 bg-[#e6ecd2]">
-      <div className="card bg-white rounded-3xl w-full max-w-[600px] shadow-lg overflow-hidden">
-        <div className="header bg-[#f76b1c] text-white p-5 flex items-center justify-center gap-2.5">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-            <line x1="9" y1="9" x2="9.01" y2="9"/>
-            <line x1="15" y1="9" x2="15.01" y2="9"/>
+    <div className="min-h-screen bg-gradient-to-b from-orange-400 to-orange-600 p-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Back Button */}
+        <button
+          onClick={() => router.back()}
+          className="mb-8 px-6 py-2 bg-white text-orange-500 rounded-full shadow-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2 group"
+        >
+          <svg 
+            className="w-5 h-5 transform transition-transform group-hover:-translate-x-1" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          <h1 className="text-2xl font-semibold m-0">Food Joke of the Day</h1>
-        </div>
-        <div className="content p-8">
-          <div className="joke-container text-center text-lg leading-relaxed text-gray-800 min-h-[100px] flex items-center justify-center">
-            {loading ? (
-              <div className="loading text-gray-600 italic flex items-center">
-                <div className="loading-spinner inline-block w-6 h-6 border-3 border-gray-200 border-t-[#f76b1c] rounded-full animate-spin mr-2.5" />
-                Loading today's joke...
-              </div>
-            ) : error ? (
-              <div className="error text-[#f76b1c] italic">{error}</div>
-            ) : (
-              joke
-            )}
+          Back
+        </button>
+
+        <div className="bg-white rounded-2xl shadow-lg p-8">
+          <h1 className="text-3xl font-bold text-center mb-8">Joke of the Day</h1>
+          
+          {/* Add your joke content here */}
+          <div className="text-center text-xl">
+            Why don't eggs tell jokes?
+            <p className="mt-4 text-orange-500 font-semibold">
+              They'd crack up! 🥚
+            </p>
           </div>
-          <p className="text-center text-gray-600 text-sm mt-5">{nextUpdate}</p>
         </div>
       </div>
       <FoodEmoji />
-    </main>
+    </div>
   );
 } 

@@ -25,6 +25,7 @@ export default function Recipe({ onClose }: RecipeProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
+  const [isFavorite, setIsFavorite] = useState(false);
   const { user } = useUser();
 
   const API_KEY = '9030cdcbe64241eea03d82bb20c19fc7';
@@ -32,6 +33,16 @@ export default function Recipe({ onClose }: RecipeProps) {
   useEffect(() => {
     fetchRecipe();
   }, []);
+
+  useEffect(() => {
+    if (user && recipe) {
+      const savedFavorites = localStorage.getItem(`favorites_${user.id}`);
+      if (savedFavorites) {
+        const favorites = JSON.parse(savedFavorites);
+        setIsFavorite(favorites.some((f: Recipe) => f.id === recipe.id));
+      }
+    }
+  }, [user, recipe]);
 
   const fetchRecipe = async () => {
     setLoading(true);
@@ -51,16 +62,20 @@ export default function Recipe({ onClose }: RecipeProps) {
     }
   };
 
-  const addToFavorites = () => {
+  const toggleFavorite = () => {
     if (!user || !recipe) return;
     
     const savedFavorites = localStorage.getItem(`favorites_${user.id}`);
     const favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
     
-    // Check if recipe is already in favorites
-    if (!favorites.some((f: Recipe) => f.id === recipe.id)) {
+    if (isFavorite) {
+      const newFavorites = favorites.filter((f: Recipe) => f.id !== recipe.id);
+      localStorage.setItem(`favorites_${user.id}`, JSON.stringify(newFavorites));
+      setIsFavorite(false);
+    } else {
       const newFavorites = [...favorites, recipe];
       localStorage.setItem(`favorites_${user.id}`, JSON.stringify(newFavorites));
+      setIsFavorite(true);
     }
   };
 
@@ -154,10 +169,14 @@ export default function Recipe({ onClose }: RecipeProps) {
           </div>
           {user && (
             <button
-              onClick={addToFavorites}
-              className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
+              onClick={toggleFavorite}
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                isFavorite 
+                  ? 'bg-red-500 text-white hover:bg-red-600' 
+                  : 'bg-orange-500 text-white hover:bg-orange-600'
+              }`}
             >
-              ❤️ Add to Favorites
+              {isFavorite ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
             </button>
           )}
         </div>

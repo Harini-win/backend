@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  min-height: 100vh;
+  background-image: url('/BG.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/CuteEasterPersonalUse-Wy8nV.ttf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.food-emoji {
+  position: absolute;
+  font-size: 20px;
+  pointer-events: none;
+  animation: fall 1s linear forwards;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(0);
+    opacity: 0;
+  }
+} 

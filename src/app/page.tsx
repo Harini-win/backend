@@ -3,6 +3,7 @@
 import { FoodEmoji } from '@/components/FoodEmoji';
 import Recipe from '@/components/Recipe';
 import Search from '@/components/Search';
+import Favorites from '@/components/Favorites';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SignIn, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
@@ -10,6 +11,7 @@ import { SignIn, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 export default function Home() {
   const [showRecipe, setShowRecipe] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
 
   return (
     <main className="w-full min-h-screen max-w-[1920px] mx-auto relative">
@@ -71,29 +73,26 @@ export default function Home() {
           aria-label="Search recipes"
         />
 
-        {/* Navigation Links */}
-        <Link 
-          href="/favorites" 
-          className="absolute cursor-pointer"
-          style={{
-            top: '3px',
-            right: '60px',
-            width: '40px',
-            height: '35px',
-          }}
-        />
+        {/* Favorites Button */}
+        <SignedIn>
+          <div 
+            onClick={() => setShowFavorites(true)}
+            className="absolute cursor-pointer hover:opacity-80 transition-opacity"
+            style={{
+              top: '3px',
+              right: '60px',
+              width: '40px',
+              height: '35px',
+            }}
+            aria-label="View favorites"
+          />
+        </SignedIn>
       </div>
 
       {/* Recipe Modal */}
       {showRecipe && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <div className="relative w-full max-w-4xl">
-            <button 
-              onClick={() => setShowRecipe(false)}
-              className="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors z-10"
-            >
-              ✕
-            </button>
             <Recipe onClose={() => setShowRecipe(false)} />
           </div>
         </div>
@@ -113,6 +112,26 @@ export default function Home() {
               <div className="p-6">
                 <h2 className="text-3xl font-bold text-center mb-6">Search Recipes</h2>
                 <Search />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Favorites Modal */}
+      {showFavorites && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="relative w-full max-w-7xl">
+            <button 
+              onClick={() => setShowFavorites(false)}
+              className="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors z-10"
+            >
+              ✕
+            </button>
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="p-6">
+                <h2 className="text-3xl font-bold text-center mb-6">Your Favorites</h2>
+                <Favorites />
               </div>
             </div>
           </div>

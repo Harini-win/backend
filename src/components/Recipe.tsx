@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useUser } from '@clerk/nextjs';
 
 interface Recipe {
   id: number;
@@ -24,6 +25,7 @@ export default function Recipe({ onClose }: RecipeProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
+  const { user } = useUser();
 
   const API_KEY = '9030cdcbe64241eea03d82bb20c19fc7';
 
@@ -46,6 +48,19 @@ export default function Recipe({ onClose }: RecipeProps) {
       setError('Failed to load recipe. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const addToFavorites = () => {
+    if (!user || !recipe) return;
+    
+    const savedFavorites = localStorage.getItem(`favorites_${user.id}`);
+    const favorites = savedFavorites ? JSON.parse(savedFavorites) : [];
+    
+    // Check if recipe is already in favorites
+    if (!favorites.some((f: Recipe) => f.id === recipe.id)) {
+      const newFavorites = [...favorites, recipe];
+      localStorage.setItem(`favorites_${user.id}`, JSON.stringify(newFavorites));
     }
   };
 
@@ -111,11 +126,11 @@ export default function Recipe({ onClose }: RecipeProps) {
   if (!recipe) return null;
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-      <div className="p-6">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden max-h-[90vh] flex flex-col">
+      <div className="sticky top-0 bg-white z-10 p-6 pb-2 border-b">
         <button
           onClick={onClose}
-          className="mb-6 px-6 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 group"
+          className="mb-4 px-6 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 group"
         >
           <svg 
             className="w-5 h-5 transform transition-transform group-hover:-translate-x-1" 
@@ -128,29 +143,26 @@ export default function Recipe({ onClose }: RecipeProps) {
           Back
         </button>
 
-        <h2 className="text-3xl font-bold text-center mb-6">{recipe.title}</h2>
+        <h2 className="text-3xl font-bold text-center mb-4">{recipe.title}</h2>
         
-        <div className="mb-8">
-          <img 
-            src={recipe.image} 
-            alt={recipe.title}
-            className="w-full h-[400px] object-cover rounded-xl"
-          />
+        <div className="flex justify-center gap-4 mb-4">
+          <div className="px-4 py-2 bg-gray-100 rounded-lg text-sm">
+            ⏱️ {recipe.readyInMinutes || '--'} min
+          </div>
+          <div className="px-4 py-2 bg-gray-100 rounded-lg text-sm">
+            👥 {recipe.servings || '--'} servings
+          </div>
+          {user && (
+            <button
+              onClick={addToFavorites}
+              className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
+            >
+              ❤️ Add to Favorites
+            </button>
+          )}
         </div>
 
-        <div className="flex justify-center gap-4 mb-8">
-          <div className="px-4 py-2 bg-gray-100 rounded-lg">
-            ⏱️ Prep: {recipe.preparationMinutes || Math.floor(recipe.readyInMinutes/2) || '--'} min
-          </div>
-          <div className="px-4 py-2 bg-gray-100 rounded-lg">
-            🍳 Cook: {recipe.cookingMinutes || (recipe.readyInMinutes - (recipe.preparationMinutes || Math.floor(recipe.readyInMinutes/2))) || '--'} min
-          </div>
-          <div className="px-4 py-2 bg-gray-100 rounded-lg">
-            👥 Serves: {recipe.servings || '--'}
-          </div>
-        </div>
-
-        <div className="flex gap-4 mb-6">
+        <div className="flex gap-4 mb-2">
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-6 py-2 rounded-full transition-all duration-300 hover:shadow-md ${
@@ -182,8 +194,18 @@ export default function Recipe({ onClose }: RecipeProps) {
             Instructions
           </button>
         </div>
+      </div>
 
-        <div className="mt-6">
+      <div className="overflow-y-auto p-6 pt-4">
+        <div className="mb-6">
+          <img 
+            src={recipe.image} 
+            alt={recipe.title}
+            className="w-full h-[300px] object-cover rounded-xl"
+          />
+        </div>
+
+        <div className="mt-4">
           {activeTab === 'overview' && (
             <div dangerouslySetInnerHTML={{ __html: recipe.summary }} />
           )}
